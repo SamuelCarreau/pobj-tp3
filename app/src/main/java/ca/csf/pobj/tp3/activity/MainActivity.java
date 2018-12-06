@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.Random;
-
 import ca.csf.pobj.tp3.R;
 import ca.csf.pobj.tp3.utils.view.CharactersFilter;
 import ca.csf.pobj.tp3.utils.view.KeyPickerDialog;
@@ -24,12 +22,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int KEY_LENGTH = 5;
     private static final int MAX_KEY_VALUE = (int) Math.pow(10, KEY_LENGTH) - 1;
+    private static final int DEFAULT_KEY_VALUE = 1;
 
     private View rootView;
     private EditText inputEditText;
     private TextView outputTextView;
     private TextView currentKeyTextView;
     private ProgressBar progressBar;
+
+    private int currentKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,13 @@ public class MainActivity extends AppCompatActivity {
         inputEditText.setFilters(new InputFilter[]{new CharactersFilter()});
         outputTextView = findViewById(R.id.output_textview);
         currentKeyTextView = findViewById(R.id.current_key_textview);
+
+        setCurrentKey(DEFAULT_KEY_VALUE);
+    }
+
+    private void setCurrentKey(int keyValue) {
+        currentKey = keyValue;
+        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key),currentKey));
     }
 
     private void showKeyPickerDialog(int key) {
@@ -51,16 +59,18 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    //TODO : Show the copied to clipboard message when required
     private void showCopiedToClipboardMessage() {
         Snackbar.make(rootView, R.string.text_copied_output, Snackbar.LENGTH_SHORT).show();
     }
 
+    //TODO : Show Connection Error when required
     private void showConnectionError() {
         Snackbar.make(rootView, R.string.text_connectivity_error, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.text_activate_wifi, (view) -> showWifiSettings())
                 .show();
     }
-
+    //TODO : Show Server Error when required
     private void showServerError() {
         Snackbar.make(rootView, R.string.text_server_error, Snackbar.LENGTH_INDEFINITE)
                 .show();
@@ -72,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchSubstitutionCypherKey(int key) {
-        //TODO
+        setCurrentKey(key);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -81,4 +91,19 @@ public class MainActivity extends AppCompatActivity {
         clipboard.setPrimaryClip(ClipData.newPlainText(getResources().getString(R.string.clipboard_encrypted_text), text));
     }
 
+    public void onEncryptButtonClicked(View view) {
+        //TODO : Encrypt the text in the input_edittext when clicked and send result to output_textview
+    }
+
+    public void onDecryptButtonClicked(View view) {
+        //TODO : Decrypt the text in the input_edittext when clicked and send result to output_textview
+    }
+
+    public void onKeySelectButtonClicked(View view) {
+        showKeyPickerDialog(currentKey);
+    }
+
+    public void onCopyButtonClicked(View view) {
+        //TODO : copy text of input_edittext on the clipBoard
+    }
 }
