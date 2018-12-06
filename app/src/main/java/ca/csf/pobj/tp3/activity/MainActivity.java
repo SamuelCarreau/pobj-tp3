@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 .setConfirmAction(this::fetchSubstitutionCypherKey)
                 .show();
     }
-
-    //TODO : Show the copied to clipboard message when required
+    
     private void showCopiedToClipboardMessage() {
         Snackbar.make(rootView, R.string.text_copied_output, Snackbar.LENGTH_SHORT).show();
     }
@@ -104,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCopyButtonClicked(View view) {
-        //TODO : copy text of input_edittext on the clipBoard
+        putTextInClipboard(String.valueOf(inputEditText.getText()));
+        showCopiedToClipboardMessage();
     }
+
+
 }
