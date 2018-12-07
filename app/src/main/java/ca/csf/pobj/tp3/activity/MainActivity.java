@@ -18,11 +18,14 @@ import ca.csf.pobj.tp3.R;
 import ca.csf.pobj.tp3.utils.view.CharactersFilter;
 import ca.csf.pobj.tp3.utils.view.KeyPickerDialog;
 
+import static ca.csf.pobj.tp3.utils.view.RandomUtil.RandomRange;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int KEY_LENGTH = 5;
     private static final int MAX_KEY_VALUE = (int) Math.pow(10, KEY_LENGTH) - 1;
-    private static final int DEFAULT_KEY_VALUE = 1;
+    public static final int MIN_KEY_VALUE = 0;
+    public static final String CURRENT_KEY = "currentKey";
 
     private View rootView;
     private EditText inputEditText;
@@ -44,12 +47,26 @@ public class MainActivity extends AppCompatActivity {
         outputTextView = findViewById(R.id.output_textview);
         currentKeyTextView = findViewById(R.id.current_key_textview);
 
-        setCurrentKey(DEFAULT_KEY_VALUE);
+        setCurrentKey(RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_KEY,currentKey);
+        //TODO: Save inputEditText and outputTextView
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        setCurrentKey(savedInstanceState.getInt(CURRENT_KEY));
+        //TODO: Load inputEditText and outputTextView
     }
 
     private void setCurrentKey(int keyValue) {
         currentKey = keyValue;
-        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key),currentKey));
+        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), currentKey));
     }
 
     private void showKeyPickerDialog(int key) {
@@ -58,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 .setConfirmAction(this::fetchSubstitutionCypherKey)
                 .show();
     }
-    
+
     private void showCopiedToClipboardMessage() {
         Snackbar.make(rootView, R.string.text_copied_output, Snackbar.LENGTH_SHORT).show();
     }
@@ -69,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAction(R.string.text_activate_wifi, (view) -> showWifiSettings())
                 .show();
     }
+
     //TODO : Show Server Error when required
     private void showServerError() {
         Snackbar.make(rootView, R.string.text_server_error, Snackbar.LENGTH_INDEFINITE)
@@ -91,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEncryptButtonClicked(View view) {
-        //TODO : Encrypt the text in the input_edittext when clicked and send result to output_textview
+        //TODO : Get the two String from server to make the encryption
+        //TODO : Encrypt the text in the inputEditText when clicked and send result to outputTextView
     }
 
     public void onDecryptButtonClicked(View view) {
-        //TODO : Decrypt the text in the input_edittext when clicked and send result to output_textview
+        //TODO : Get the two String from server to make the encryption
+        //TODO : Decrypt the text in the inputEditText when clicked and send result to outputTextView
     }
 
     public void onKeySelectButtonClicked(View view) {
@@ -103,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCopyButtonClicked(View view) {
-        putTextInClipboard(String.valueOf(inputEditText.getText()));
+        putTextInClipboard(String.valueOf(outputTextView.getText()));
         showCopiedToClipboardMessage();
     }
 
