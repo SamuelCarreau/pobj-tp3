@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Encrypteur de texte</string>
+
+    <string name="hint_input_text">Appuyez pour saisir du texte</string>
+    <string name="text_encrypt">Crypter</string>
+    <string name="text_decrypt">Déchiffrer</string>
+    <string name="hint_output_text">Le resultat apparaitra ici</string>
+    <string name="text_current_key">Key : %05d</string>
+    <string name="text_copy">Copie</string>
+
+    <string name="text_connectivity_error">Vous netes pas connecter à Internet.</string>
+    <string name="text_server_error">Le serveur est en maintenance. Veuillez essayer plus tard.</string>
+    <string name="text_copied_output">Copier!</string>
+
+    <string name="text_activate_wifi">Activez le Wifi</string>
+
+    <string name="clipboard_encrypted_text">Texte crypté</string>
+</resources>
