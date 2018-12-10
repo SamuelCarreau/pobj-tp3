@@ -1,4 +1,4 @@
-package ca.csf.pobj.tp3.utils.view;
+package ca.csf.pobj.tp3.utils;
 
 import java.util.Random;
 

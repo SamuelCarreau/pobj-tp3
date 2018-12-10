@@ -17,10 +17,11 @@ import android.widget.TextView;
 import ca.csf.pobj.tp3.R;
 import ca.csf.pobj.tp3.utils.view.CharactersFilter;
 import ca.csf.pobj.tp3.utils.view.KeyPickerDialog;
+import ca.csf.pobj.tp3.cypher.*;
 
-import static ca.csf.pobj.tp3.utils.view.RandomUtil.RandomRange;
+import static ca.csf.pobj.tp3.utils.RandomUtil.RandomRange;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FindKeyTask.Listener{
 
     private static final int KEY_LENGTH = 5;
     private static final int MAX_KEY_VALUE = (int) Math.pow(10, KEY_LENGTH) - 1;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView currentKeyTextView;
     private ProgressBar progressBar;
 
-    private int currentKey;
+    private Key currentKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,26 +48,33 @@ public class MainActivity extends AppCompatActivity {
         outputTextView = findViewById(R.id.output_textview);
         currentKeyTextView = findViewById(R.id.current_key_textview);
 
-        setCurrentKey(RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE));
+        createCurrentKey(RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE));
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CURRENT_KEY,currentKey);
         //TODO: Save inputEditText and outputTextView
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        setCurrentKey(savedInstanceState.getInt(CURRENT_KEY));
         //TODO: Load inputEditText and outputTextView
     }
 
-    private void setCurrentKey(int keyValue) {
-        currentKey = keyValue;
-        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), currentKey));
+    private void createCurrentKey(int keyValue) {
+        //TODO: showLoadingBAR
+
+        FindKeyTask task = new FindKeyTask();
+        task.addListener(this);
+        task.execute(keyValue);
+
+    }
+
+    private void setCurrentKey(Key key){
+        currentKey = key;
+        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), currentKey.getKeyNumber()));
     }
 
     private void showKeyPickerDialog(int key) {
@@ -99,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchSubstitutionCypherKey(int key) {
-        setCurrentKey(key);
+        createCurrentKey(key);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -119,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onKeySelectButtonClicked(View view) {
-        showKeyPickerDialog(currentKey);
+        showKeyPickerDialog(currentKey.getKeyNumber());
     }
 
     public void onCopyButtonClicked(View view) {
@@ -128,4 +136,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onKeyFound(Key key) {
+        //TODO : receive a key and assign it to the currentKey
+    }
 }
