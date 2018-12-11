@@ -1,18 +1,19 @@
 package ca.csf.pobj.tp3.cypher;
 
 public class Key {
-    public final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .";
 
-    private int keyNumber;
-    private String substitutionString;
+    private int id;
+    private String outputCharacters;
+    private String inputCharacters;
 
-    public Key(int keyNumber, String substitutionString) {
-        this.keyNumber = keyNumber;
-        this.substitutionString = substitutionString;
+    public Key(int id, String outputCharacters,String inputCharacters) {
+        this.id = id;
+        this.outputCharacters = outputCharacters;
+        this.inputCharacters = inputCharacters;
     }
 
-    public int getKeyNumber() {
-        return keyNumber;
+    public int getId() {
+        return id;
     }
 
     public String encrypt(String cleanText){

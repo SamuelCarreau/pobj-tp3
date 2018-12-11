@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
 
     private static final int KEY_LENGTH = 5;
     private static final int MAX_KEY_VALUE = (int) Math.pow(10, KEY_LENGTH) - 1;
-    public static final int MIN_KEY_VALUE = 0;
-    public static final String CURRENT_KEY = "currentKey";
+    private static final int MIN_KEY_VALUE = 0;
+    private static final String CURRENT_KEY = "currentKey";
 
     private View rootView;
     private EditText inputEditText;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
 
     private void setCurrentKey(Key key){
         currentKey = key;
-        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), currentKey.getKeyNumber()));
+        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), currentKey.getId()));
     }
 
     private void showKeyPickerDialog(int key) {
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     }
 
     public void onKeySelectButtonClicked(View view) {
-        showKeyPickerDialog(currentKey.getKeyNumber());
+        showKeyPickerDialog(currentKey.getId());
     }
 
     public void onCopyButtonClicked(View view) {

@@ -2,13 +2,21 @@ package ca.csf.pobj.tp3.cypher;
 
 import android.os.AsyncTask;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindKeyTask extends AsyncTask<Integer,Void,String> {
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class FindKeyTask extends AsyncTask<Integer,Void,Key> {
 
 
-    public static final String URL = "";
+    public static final String URL = "https://m1t2.csfpwmjv.tk/api/key/%d";
 
     private List<Listener> listeners = new ArrayList<>();
 
@@ -17,7 +25,34 @@ public class FindKeyTask extends AsyncTask<Integer,Void,String> {
     }
 
     @Override
-    protected String doInBackground(Integer... integers) {
+    protected Key doInBackground(Integer... keys) {
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(String.format(URL,keys[0]))
+                .build();
+        Call call = client.newCall(request);
+
+        try{
+            Response response = call.execute();
+            if(response.isSuccessful()){
+                String responseBody = response.body().string();
+
+                ObjectMapper mapper = new ObjectMapper();
+                //TODO get JsonFile and deserialize
+                //TODO : create the Key object and return it
+                Key key = mapper.readValue(responseBody,Key.class);
+                System.out.println("toto");
+            }
+            else {
+                // TODO : show error code server error.
+            }
+
+        }catch (IOException exception){
+            exception.printStackTrace();
+            //TODO : show error code Connectivity Error.
+        }
+
         return null;
     }
 
