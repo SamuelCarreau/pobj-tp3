@@ -42,7 +42,7 @@ public class FindKeyTask extends AsyncTask<Integer,Void,Key> {
                 ObjectMapper mapper = new ObjectMapper();
                 //TODO : create the Key object and return it
                 Key key = mapper.readValue(responseBody,Key.class);
-                System.out.println(key);
+                return key;
             }
             else {
                 // TODO : show error code server error.

@@ -139,5 +139,6 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     @Override
     public void onKeyFound(Key key) {
         //TODO : receive a key and assign it to the currentKey
+        System.out.println(key);
     }
 }
