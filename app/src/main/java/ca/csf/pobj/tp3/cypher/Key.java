@@ -1,18 +1,17 @@
 package ca.csf.pobj.tp3.cypher;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Key {
 
     private int id;
     private String outputCharacters;
     private String inputCharacters;
 
-    public Key(){
 
-    }
-
+    @JsonCreator
     public Key(int id, String outputCharacters,String inputCharacters) {
         this.id = id;
         this.outputCharacters = outputCharacters;
