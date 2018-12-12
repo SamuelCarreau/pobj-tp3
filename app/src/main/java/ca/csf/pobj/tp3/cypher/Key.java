@@ -25,7 +25,6 @@ public class Key {
 
     public String encrypt(String cleanText){
         String encryptText = "";
-        String substitutionString ="";
 
         // TODO : receive clean text and return encrypted text
 
@@ -34,7 +33,6 @@ public class Key {
 
     public String decrypt(String encryptText){
         String decryptText = "";
-        String substitutionString ="";
 
         // TODO : receive encrypted text and return decrypted text
 
