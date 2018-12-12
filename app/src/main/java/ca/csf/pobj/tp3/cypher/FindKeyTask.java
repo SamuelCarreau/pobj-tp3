@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.csf.pobj.tp3.utils.JsonDeserializer;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,10 +40,9 @@ public class FindKeyTask extends AsyncTask<Integer,Void,Key> {
                 String responseBody = response.body().string();
 
                 ObjectMapper mapper = new ObjectMapper();
-                //TODO get JsonFile and deserialize
                 //TODO : create the Key object and return it
                 Key key = mapper.readValue(responseBody,Key.class);
-                System.out.println("toto");
+                System.out.println(key);
             }
             else {
                 // TODO : show error code server error.

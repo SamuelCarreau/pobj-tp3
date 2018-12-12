@@ -1,10 +1,17 @@
 package ca.csf.pobj.tp3.cypher;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Key {
 
     private int id;
     private String outputCharacters;
     private String inputCharacters;
+
+    public Key(){
+
+    }
 
     public Key(int id, String outputCharacters,String inputCharacters) {
         this.id = id;
@@ -32,5 +39,14 @@ public class Key {
         // TODO : receive encrypted text and return decrypted text
 
         return decryptText;
+    }
+
+    @Override
+    public String toString() {
+        return "Key{" +
+                "id=" + id +
+                ", outputCharacters='" + outputCharacters + '\'' +
+                ", inputCharacters='" + inputCharacters + '\'' +
+                '}';
     }
 }
