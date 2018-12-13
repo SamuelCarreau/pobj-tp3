@@ -24,7 +24,7 @@ public class Key {
     }
 
     public String encrypt(String cleanText){
-        String encryptText = "";
+        String encryptText = "toto";
 
         // TODO : receive clean text and return encrypted text
 
@@ -32,7 +32,7 @@ public class Key {
     }
 
     public String decrypt(String encryptText){
-        String decryptText = "";
+        String decryptText = "tata";
 
         // TODO : receive encrypted text and return decrypted text
 

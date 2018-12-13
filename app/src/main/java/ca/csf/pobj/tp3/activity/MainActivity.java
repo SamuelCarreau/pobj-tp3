@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import ca.csf.pobj.tp3.R;
+import ca.csf.pobj.tp3.utils.Result;
 import ca.csf.pobj.tp3.utils.view.CharactersFilter;
 import ca.csf.pobj.tp3.utils.view.KeyPickerDialog;
 import ca.csf.pobj.tp3.cypher.*;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private ProgressBar progressBar;
 
     private Key currentKey;
+    private int currentKeyNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         outputTextView = findViewById(R.id.output_textview);
         currentKeyTextView = findViewById(R.id.current_key_textview);
 
-        createCurrentKey(RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE));
+        currentKeyNumber = RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE);
+        createCurrentKey(currentKeyNumber);
     }
 
     @Override
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private void createCurrentKey(int keyValue) {
         //TODO: showLoadingBAR
 
+        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), keyValue));
+
         FindKeyTask task = new FindKeyTask();
         task.addListener(this);
         task.execute(keyValue);
@@ -74,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
 
     private void setCurrentKey(Key key){
         currentKey = key;
-        currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), currentKey.getId()));
     }
 
     private void showKeyPickerDialog(int key) {
@@ -88,14 +92,12 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         Snackbar.make(rootView, R.string.text_copied_output, Snackbar.LENGTH_SHORT).show();
     }
 
-    //TODO : Show Connection Error when required
     private void showConnectionError() {
         Snackbar.make(rootView, R.string.text_connectivity_error, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.text_activate_wifi, (view) -> showWifiSettings())
                 .show();
     }
 
-    //TODO : Show Server Error when required
     private void showServerError() {
         Snackbar.make(rootView, R.string.text_server_error, Snackbar.LENGTH_INDEFINITE)
                 .show();
@@ -117,12 +119,22 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     }
 
     public void onEncryptButtonClicked(View view) {
-        //TODO : Get the two String from server to make the encryption
+        if (currentKey != null){
+            outputTextView.setText(currentKey.encrypt(String.valueOf(inputEditText.getText())));
+        }
+        else{
+            createCurrentKey(currentKeyNumber);
+        }
         //TODO : Encrypt the text in the inputEditText when clicked and send result to outputTextView
     }
 
     public void onDecryptButtonClicked(View view) {
-        //TODO : Get the two String from server to make the encryption
+        if (currentKey != null){
+            outputTextView.setText(currentKey.decrypt(String.valueOf(inputEditText.getText())));
+        }
+        else{
+            createCurrentKey(currentKeyNumber);
+        }
         //TODO : Decrypt the text in the inputEditText when clicked and send result to outputTextView
     }
 
@@ -137,8 +149,16 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
 
 
     @Override
-    public void onKeyFound(Key key) {
-        //TODO : receive a key and assign it to the currentKey
-        System.out.println(key);
+    public void onKeyFound(Result result) {
+        //TODO : stop loading view
+        if(result.isConnectivityError()){
+            showConnectionError();
+        }
+        else if(result.isServerError()){
+            showServerError();
+        }
+        else {
+            setCurrentKey(result.getKey());
+        }
     }
 }

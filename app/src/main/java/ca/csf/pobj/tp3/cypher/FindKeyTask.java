@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.csf.pobj.tp3.utils.JsonDeserializer;
+import ca.csf.pobj.tp3.utils.Result;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class FindKeyTask extends AsyncTask<Integer,Void,Key> {
+public class FindKeyTask extends AsyncTask<Integer,Void,Result> {
 
 
     public static final String URL = "https://m1t2.csfpwmjv.tk/api/key/%d";
@@ -26,7 +26,7 @@ public class FindKeyTask extends AsyncTask<Integer,Void,Key> {
     }
 
     @Override
-    protected Key doInBackground(Integer... keys) {
+    protected Result doInBackground(Integer... keys) {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -40,24 +40,27 @@ public class FindKeyTask extends AsyncTask<Integer,Void,Key> {
                 String responseBody = response.body().string();
 
                 ObjectMapper mapper = new ObjectMapper();
-                //TODO : create the Key object and return it
                 Key key = mapper.readValue(responseBody,Key.class);
-                return key;
+                return Result.Ok(key);
             }
             else {
-                // TODO : show error code server error.
+                return Result.serverError();
             }
 
         }catch (IOException exception){
             exception.printStackTrace();
-            //TODO : show error code Connectivity Error.
+            return  Result.connectivityError();
         }
+    }
 
-        return null;
+    @Override
+    protected void onPostExecute(Result result) {
+        for(Listener listener : listeners){
+            listener.onKeyFound(result);
+        }
     }
 
     public interface Listener {
-        void onKeyFound(Key key);
-
+        void onKeyFound(Result key);
     }
 }
