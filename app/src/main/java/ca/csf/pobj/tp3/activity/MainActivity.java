@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private static final int MAX_KEY_VALUE = (int) Math.pow(10, KEY_LENGTH) - 1;
     private static final int MIN_KEY_VALUE = 0;
     private static final String CURRENT_KEY = "currentKey";
+    public static final String INPUT_EDIT_TEXT = "INPUT_EDIT_TEXT";
+    public static final String OUTPUT_TEXT_VIEW = "outputTextView";
 
     private View rootView;
     private EditText inputEditText;
@@ -50,20 +54,32 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         outputTextView = findViewById(R.id.output_textview);
         currentKeyTextView = findViewById(R.id.current_key_textview);
 
-        currentKeyNumber = RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE);
-        createCurrentKey(currentKeyNumber);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentKey == null) {
+            currentKeyNumber = RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE);
+            createCurrentKey(currentKeyNumber);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //TODO: Save inputEditText and outputTextView
+        outState.putParcelable(CURRENT_KEY, currentKey);
+        outState.putString(INPUT_EDIT_TEXT, String.valueOf(inputEditText.getText()));
+        outState.putString(OUTPUT_TEXT_VIEW, String.valueOf(outputTextView.getText()));
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //TODO: Load inputEditText and outputTextView
+        currentKey = savedInstanceState.getParcelable(CURRENT_KEY);
+        currentKeyNumber = currentKey.getId();
+        inputEditText.setText(savedInstanceState.getString(INPUT_EDIT_TEXT));
+        outputTextView.setText(savedInstanceState.getString(OUTPUT_TEXT_VIEW));
     }
 
     private void createCurrentKey(int keyValue) {

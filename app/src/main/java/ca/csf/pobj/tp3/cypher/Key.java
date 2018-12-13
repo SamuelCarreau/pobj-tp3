@@ -1,9 +1,12 @@
 package ca.csf.pobj.tp3.cypher;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Key {
+public class Key implements Parcelable {
 
     private int id;
     private String outputCharacters;
@@ -17,6 +20,12 @@ public class Key {
         this.id = id;
         this.outputCharacters = outputCharacters;
         this.inputCharacters = inputCharacters;
+    }
+
+    public Key(Parcel in){
+        this.id = in.readInt();
+        this.inputCharacters = in.readString();
+        this.outputCharacters = in.readString();
     }
 
     public int getId() {
@@ -46,5 +55,17 @@ public class Key {
                 ", outputCharacters='" + outputCharacters + '\'' +
                 ", inputCharacters='" + inputCharacters + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(inputCharacters);
+        dest.writeString(outputCharacters);
     }
 }
