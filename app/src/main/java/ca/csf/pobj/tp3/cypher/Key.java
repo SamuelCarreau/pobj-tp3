@@ -22,11 +22,9 @@ public class Key implements Parcelable {
         this.inputCharacters = inputCharacters;
     }
 
-    public Key(Parcel in){
-        this.id = in.readInt();
-        this.inputCharacters = in.readString();
-        this.outputCharacters = in.readString();
-    }
+
+
+
 
     public int getId() {
         return id;
@@ -57,6 +55,8 @@ public class Key implements Parcelable {
                 '}';
     }
 
+    // region Parcelable
+
     @Override
     public int describeContents() {
         return 0;
@@ -68,4 +68,24 @@ public class Key implements Parcelable {
         dest.writeString(inputCharacters);
         dest.writeString(outputCharacters);
     }
+
+    private Key(Parcel in){
+        this.id = in.readInt();
+        this.inputCharacters = in.readString();
+        this.outputCharacters = in.readString();
+    }
+
+    public static final Parcelable.Creator<Key> CREATOR = new Creator<Key>() {
+        @Override
+        public Key createFromParcel(Parcel source) {
+            return new Key(source);
+        }
+
+        @Override
+        public Key[] newArray(int size) {
+            return new Key[size];
+        }
+    };
+
+    // endregion
 }

@@ -29,9 +29,9 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private static final int KEY_LENGTH = 5;
     private static final int MAX_KEY_VALUE = (int) Math.pow(10, KEY_LENGTH) - 1;
     private static final int MIN_KEY_VALUE = 0;
-    private static final String CURRENT_KEY = "currentKey";
+    private static final String CURRENT_KEY = "CURRENT_KEY";
     public static final String INPUT_EDIT_TEXT = "INPUT_EDIT_TEXT";
-    public static final String OUTPUT_TEXT_VIEW = "outputTextView";
+    public static final String OUTPUT_TEXT_VIEW = "OUTPUT_TEXT_VIEW";
 
     private View rootView;
     private EditText inputEditText;
