@@ -1,6 +1,7 @@
 package ca.csf.pobj.tp3.cypher;
 
 import android.os.AsyncTask;
+import android.os.SystemClock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,6 +42,7 @@ public class FindKeyTask extends AsyncTask<Integer,Void,Result> {
 
                 ObjectMapper mapper = new ObjectMapper();
                 Key key = mapper.readValue(responseBody,Key.class);
+
                 return Result.Ok(key);
             }
             else {

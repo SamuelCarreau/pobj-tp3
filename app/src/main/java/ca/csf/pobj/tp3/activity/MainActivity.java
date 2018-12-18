@@ -5,8 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import ca.csf.pobj.tp3.R;
+import ca.csf.pobj.tp3.cypher.FindKeyTask;
+import ca.csf.pobj.tp3.cypher.Key;
 import ca.csf.pobj.tp3.utils.Result;
 import ca.csf.pobj.tp3.utils.view.CharactersFilter;
 import ca.csf.pobj.tp3.utils.view.KeyPickerDialog;
-import ca.csf.pobj.tp3.cypher.*;
 
 import static ca.csf.pobj.tp3.utils.RandomUtil.RandomRange;
 
@@ -30,15 +29,16 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private static final int MAX_KEY_VALUE = (int) Math.pow(10, KEY_LENGTH) - 1;
     private static final int MIN_KEY_VALUE = 0;
     private static final String CURRENT_KEY = "CURRENT_KEY";
-    public static final String INPUT_EDIT_TEXT = "INPUT_EDIT_TEXT";
-    public static final String OUTPUT_TEXT_VIEW = "OUTPUT_TEXT_VIEW";
+    private static final String INPUT_EDIT_TEXT = "INPUT_EDIT_TEXT";
+    private static final String OUTPUT_TEXT_VIEW = "OUTPUT_TEXT_VIEW";
+    public static final String KEY_PICKER_DIALOG_IS_VISIBLE = "KEY_PICKER_DIALOG_IS_VISIBLE";
 
     private View rootView;
     private EditText inputEditText;
     private TextView outputTextView;
     private TextView currentKeyTextView;
     private ProgressBar progressBar;
-
+    private boolean keyPickerDialogIsVisible;
     private Key currentKey;
     private int currentKeyNumber;
 
@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         outputTextView = findViewById(R.id.output_textview);
         currentKeyTextView = findViewById(R.id.current_key_textview);
 
+        keyPickerDialogIsVisible = false;
+
     }
 
     @Override
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         super.onResume();
         if (currentKey == null) {
             currentKeyNumber = RandomRange(MIN_KEY_VALUE, MAX_KEY_VALUE);
-            createCurrentKey(currentKeyNumber);
+            fetchCurrentKey(currentKeyNumber);
         }
     }
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         outState.putParcelable(CURRENT_KEY, currentKey);
         outState.putString(INPUT_EDIT_TEXT, String.valueOf(inputEditText.getText()));
         outState.putString(OUTPUT_TEXT_VIEW, String.valueOf(outputTextView.getText()));
+        outState.putBoolean(KEY_PICKER_DIALOG_IS_VISIBLE,keyPickerDialogIsVisible);
     }
 
     @Override
@@ -80,10 +83,15 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         currentKeyNumber = currentKey.getId();
         inputEditText.setText(savedInstanceState.getString(INPUT_EDIT_TEXT));
         outputTextView.setText(savedInstanceState.getString(OUTPUT_TEXT_VIEW));
+
+        keyPickerDialogIsVisible = savedInstanceState.getBoolean(KEY_PICKER_DIALOG_IS_VISIBLE);
+        if(keyPickerDialogIsVisible){
+            showKeyPickerDialog(currentKey.getId());
+        }
     }
 
-    private void createCurrentKey(int keyValue) {
-        //TODO: showLoadingBAR
+    private void fetchCurrentKey(int keyValue) {
+        showProgressBar();
 
         currentKeyTextView.setText(String.format(getResources().getString(R.string.text_current_key), keyValue));
 
@@ -125,7 +133,9 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     }
 
     private void fetchSubstitutionCypherKey(int key) {
-        createCurrentKey(key);
+        keyPickerDialogIsVisible = false;
+
+        fetchCurrentKey(key);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -139,9 +149,8 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
             outputTextView.setText(currentKey.encrypt(String.valueOf(inputEditText.getText())));
         }
         else{
-            createCurrentKey(currentKeyNumber);
+            fetchCurrentKey(currentKeyNumber);
         }
-        //TODO : Encrypt the text in the inputEditText when clicked and send result to outputTextView
     }
 
     public void onDecryptButtonClicked(View view) {
@@ -149,12 +158,13 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
             outputTextView.setText(currentKey.decrypt(String.valueOf(inputEditText.getText())));
         }
         else{
-            createCurrentKey(currentKeyNumber);
+            fetchCurrentKey(currentKeyNumber);
         }
-        //TODO : Decrypt the text in the inputEditText when clicked and send result to outputTextView
     }
 
     public void onKeySelectButtonClicked(View view) {
+        keyPickerDialogIsVisible = true;
+
         showKeyPickerDialog(currentKey.getId());
     }
 
@@ -163,10 +173,17 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         showCopiedToClipboardMessage();
     }
 
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() { progressBar.setVisibility(View.INVISIBLE);}
+
 
     @Override
     public void onKeyFound(Result result) {
-        //TODO : stop loading view
+        hideProgressBar();
+
         if(result.isConnectivityError()){
             showConnectionError();
         }

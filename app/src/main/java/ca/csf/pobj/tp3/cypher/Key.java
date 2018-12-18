@@ -22,28 +22,32 @@ public class Key implements Parcelable {
         this.inputCharacters = inputCharacters;
     }
 
-
-
-
-
     public int getId() {
         return id;
     }
 
     public String encrypt(String cleanText){
-        String encryptText = "toto";
+        StringBuilder builder = new StringBuilder();
 
-        // TODO : receive clean text and return encrypted text
+        for (int i = 0; i < cleanText.length(); i++){
+            int indexOfMyChar = inputCharacters.indexOf(cleanText.charAt(i));
+            char substitute = outputCharacters.charAt(indexOfMyChar);
+            builder.append(substitute);
+        }
 
-        return encryptText;
+        return builder.toString();
     }
 
     public String decrypt(String encryptText){
-        String decryptText = "tata";
+        StringBuilder builder = new StringBuilder();
 
-        // TODO : receive encrypted text and return decrypted text
+        for (int i = 0; i <encryptText.length();i++){
+            int indexOfMyChar = outputCharacters.indexOf(encryptText.charAt(i));
+            char substitute = inputCharacters.charAt(indexOfMyChar);
+            builder.append(substitute);
+        }
 
-        return decryptText;
+        return builder.toString();
     }
 
     @Override
