@@ -1,5 +1,6 @@
 package ca.csf.pobj.tp3.activity;
 
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.text.Normalizer;
 
 import ca.csf.pobj.tp3.R;
 import ca.csf.pobj.tp3.cypher.FindKeyTask;
@@ -53,9 +56,22 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         inputEditText.setFilters(new InputFilter[]{new CharactersFilter()});
         outputTextView = findViewById(R.id.output_textview);
         currentKeyTextView = findViewById(R.id.current_key_textview);
-
         keyPickerDialogIsVisible = false;
 
+        setInputEditTextToSharedStringIfExist();
+    }
+
+    private void setInputEditTextToSharedStringIfExist() {
+        Intent intent = getIntent();
+        String shareText = null;
+        if(intent != null){
+            shareText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        }
+        if(shareText != null){
+            shareText = Normalizer.normalize(shareText,Normalizer.Form.NFD);
+            inputEditText.setText(shareText);
+
+        }
     }
 
     @Override
