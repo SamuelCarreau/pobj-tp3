@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
@@ -58,19 +59,18 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
         currentKeyTextView = findViewById(R.id.current_key_textview);
         keyPickerDialogIsVisible = false;
 
-        setInputEditTextToSharedStringIfExist();
+        handleIntent();
     }
 
-    private void setInputEditTextToSharedStringIfExist() {
+    private void handleIntent() {
         Intent intent = getIntent();
-        String shareText = null;
-        if(intent != null){
+        String shareText;
+        if(intent.getType() != null && intent.getType().equals("text/plain")){
             shareText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        }
-        if(shareText != null){
-            shareText = Normalizer.normalize(shareText,Normalizer.Form.NFD);
-            inputEditText.setText(shareText);
-
+            if(shareText != null){
+                shareText = Normalizer.normalize(shareText,Normalizer.Form.NFD);
+                inputEditText.setText(shareText);
+            }
         }
     }
 
