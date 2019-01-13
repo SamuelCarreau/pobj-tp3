@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private static final String CURRENT_KEY = "CURRENT_KEY";
     private static final String INPUT_EDIT_TEXT = "INPUT_EDIT_TEXT";
     private static final String OUTPUT_TEXT_VIEW = "OUTPUT_TEXT_VIEW";
+    //BEN_CORRECTION : Devrait être private.
     public static final String KEY_PICKER_DIALOG_IS_VISIBLE = "KEY_PICKER_DIALOG_IS_VISIBLE";
 
     private View rootView;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private ProgressBar progressBar;
     private boolean keyPickerDialogIsVisible;
     private Key currentKey;
-    private int currentKeyNumber;
+    private int currentKeyNumber; //BEN_REVIEW: Inutile à mon avis, car "currentKey" contient déjà le "id".
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements FindKeyTask.Liste
     private void handleIntent() {
         Intent intent = getIntent();
         String shareText;
+        //BEN_CORRECTION : Constante manquante pour "text/plain".
         if(intent.getType() != null && intent.getType().equals("text/plain")){
             shareText = intent.getStringExtra(Intent.EXTRA_TEXT);
             if(shareText != null){

@@ -26,6 +26,7 @@ public class Key implements Parcelable {
         return id;
     }
 
+    //BEN_CORRECTION : Duplcation de code (voir decrypt) facile à résoudre.
     public String encrypt(String cleanText){
         StringBuilder builder = new StringBuilder();
 

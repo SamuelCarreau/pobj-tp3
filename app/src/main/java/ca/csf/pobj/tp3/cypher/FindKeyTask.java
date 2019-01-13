@@ -18,6 +18,7 @@ import okhttp3.Response;
 public class FindKeyTask extends AsyncTask<Integer,Void,Result> {
 
 
+    //BEN_CORRECTION : Aurait pu être private.
     public static final String URL = "https://m1t2.csfpwmjv.tk/api/key/%d";
 
     private List<Listener> listeners = new ArrayList<>();
@@ -50,7 +51,7 @@ public class FindKeyTask extends AsyncTask<Integer,Void,Result> {
             }
 
         }catch (IOException exception){
-            exception.printStackTrace();
+            exception.printStackTrace(); //BEN_REVIEW : Le standard Java est d'appeller tout exception "e".
             return  Result.connectivityError();
         }
     }
@@ -63,6 +64,6 @@ public class FindKeyTask extends AsyncTask<Integer,Void,Result> {
     }
 
     public interface Listener {
-        void onKeyFound(Result key);
+        void onKeyFound(Result key); //BEN_REVIEW : Nommage à revoir.
     }
 }

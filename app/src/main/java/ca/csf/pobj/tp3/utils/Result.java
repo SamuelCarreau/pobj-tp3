@@ -28,6 +28,7 @@ public class Result {
         return serverError;
     }
 
+    //BEN_CORRECTION : Devrait être en "camelCase", pas en "PascalCase".
     public static Result Ok(Key key){
         return new Result(key,false,false);
     }

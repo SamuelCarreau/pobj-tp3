@@ -25,13 +25,14 @@ public class JsonDeserializer {
             key = mapper.readValue(responseBody,Key.class);
         }
         catch (JsonGenerationException e){
-            e.printStackTrace();
+            e.printStackTrace(); //BEN_CORRECTION : Exception ignorée. Server error.
         }catch (JsonMappingException e){
-            e.printStackTrace();
+            e.printStackTrace(); //BEN_CORRECTION : Exception ignorée. Server error.
         }
         catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //BEN_CORRECTION : Exception ignorée. Server error.
         }
+        //BEN_REVIEW : Lire les warnings. Explications ici : https://stackoverflow.com/a/26266870
         finally {
             return key;
         }
